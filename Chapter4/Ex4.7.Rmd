@@ -1,0 +1,30 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 4, Example 4.7
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("stats")
+```
+###General
+```{r, echo = TRUE}
+setwd("C:/Users/Daniela/Desktop/Projects2023/Book/FInalDraft/Codes_and_Data/Chapter4")
+data <-read.csv(file="Ex4.7.csv",head=TRUE,sep=",")
+data=data[c(1:14),c(1:2)];
+data
+```
+
+###Model
+```{r, echo = TRUE}
+library(stats)
+model <- nls(data$Capacity~ k*(data$N^p),
+                 data = data,
+                 start = list(k=4, p = -0.1),)
+summary(model)
+```
+

@@ -1,0 +1,34 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 3, Example 3.1
+
+###Install
+```{r, echo = TRUE}
+install.packages("pastecs")
+install.packages("Hmisc")
+```
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.1.csv",head=TRUE,sep=",")
+data=data[c(3:47),c(1:3)];
+
+#METHOD 1 - Summary
+summary(as.numeric(data$X1))
+summary(as.numeric(data$X2))
+
+#METHOD 2 - Pastecs
+library(pastecs)
+stat.desc(as.numeric(data$X1))
+stat.desc(as.numeric(data$X2))
+
+#METHOD 3 - Hmisc
+library(Hmisc)
+describe(as.numeric(data$X1))
+describe(as.numeric(data$X2))
+```

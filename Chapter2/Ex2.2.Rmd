@@ -1,0 +1,18 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+###Example 2.2
+###SimpleScatterPlot
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter2/Examples")
+data<-read.csv(file="Ex2.2_A.csv",head=TRUE,sep=",")
+data= data[c(3:7),c(1:4)]
+data
+AmineFlow = data$AmineFlow
+AcidGasLoading=data$AcidGas.Loading
+plot(AmineFlow,AcidGasLoading, main="Acid Gas Loading at 40% amine conc.", xlab = "Amine Flow, USGPM", ylab="Acid Gas Loading", pch=19)
+```
+

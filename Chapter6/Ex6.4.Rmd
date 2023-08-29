@@ -1,0 +1,34 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+###Example 6.4
+###Install packages
+```{r, echo = TRUE}
+install.packages("mco")
+install.packages("nsga2")
+```
+
+###NSGA-II Optimization
+```{r, echo = TRUE}
+library(mco)
+
+hex <- function(x) {
+f1 <- (-1)*((1-exp(-x[2]*(1-x[1])))/(1-x[1]*exp(-x[2]*(1-x[1])))); #to maximize
+
+f2 <- 500+1200*x[2]+1500*x[1]^2; #to minimize
+
+return(c(f1,f2))
+}
+
+res <- nsga2(hex, 2, 2, generations=1000,
+            lower.bounds=c(0.1, 1), upper.bounds=c(0.9, 10), mprob=0.2,cprob=0.8,popsize=200,vectorized=FALSE)
+
+plot(res, xlab="effectiveness", ylab="cost, USD")
+print(res$value)
+print(res$par)
+```
+

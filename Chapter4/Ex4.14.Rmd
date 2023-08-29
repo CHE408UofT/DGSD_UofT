@@ -1,0 +1,41 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 4, Example 4.14
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("grf")
+#install sufrep from zip file
+```
+
+###General
+```{r, echo = TRUE}
+library(sufrep)
+setwd("C:/Book/Chapter4/Examples")
+data <-read.csv(file="Ex4.15.csv",head=TRUE,sep=",")
+data=data[c(1:160),c(1:9)];
+
+dataX=data[c(1:160),c(1:8)];
+#The probability of getting the illness
+dataY=data$Prob;
+BINaml <- rbinom(length(dataY),1,dataY);
+```
+
+
+
+
+###Causal forest
+```{r, echo = TRUE}
+library(grf)
+n<-length(dataY)
+W<-rbinom(n,1,0.5)
+c.forest<-causal_forest(dataX,BINaml,W,tune.num.reps=80)
+average_treatment_effect(c.forest)
+```
+
+

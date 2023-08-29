@@ -1,0 +1,21 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 3, Example 3.4
+
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.4.csv",head=TRUE,sep=",")
+data
+# Scatter plot
+plot(data$Ion1.Ion3, data$Ion2.Ion3, 
+   xlab="Ion1/Ion3 ", ylab="Ion2/Ion3", pch=19)
+abline(lm(data$Ion2.Ion3~data$Ion1.Ion3), col="red") # regression line (y~x)
+```
+

@@ -1,0 +1,45 @@
+6---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 3, Example 3.9
+
+
+###Install
+```{r, echo = TRUE}
+install.packages("dplyr")
+```
+
+###Scatter plot
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.9.csv",head=TRUE,sep=",")
+data
+# Scatter plot
+plot(data$AmineFlow,data$AcidGas.Loading, 
+   xlab="Amine Flow, USGPM ", ylab="Acid Gas Loading, %mol/%mol", pch=19)
+```
+
+
+###Cook's distance
+```{r, echo = TRUE}
+#Fit with linear regression
+model <- lm(data$AcidGas.Loading ~ data$AmineFlow, data = data)
+summary(model)
+
+#Detect outliers using Cook's distance
+cooksD <- cooks.distance(model)
+influential <- cooksD[(cooksD > (3 * mean(cooksD, na.rm = TRUE)))]
+influential
+
+#Remove outliers and fit model again
+library(dplyr)
+names_of_influential <- names(influential)
+outliers <- data[names_of_influential,]
+data_without_outliers <- data %>% anti_join(outliers)
+model2 <- lm(data_without_outliers$AcidGas.Loading ~ data_without_outliers$AmineFlow, data = data_without_outliers)
+summary(model2)
+```

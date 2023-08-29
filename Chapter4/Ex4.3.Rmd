@@ -1,0 +1,28 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 4, Example 4.3
+
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter4/Examples")
+data <-read.csv(file="Ex4.3.csv",head=TRUE,sep=",")
+data=data[c(1:24),c(1:2)];
+data
+```
+
+###Model
+```{r, echo = TRUE}
+model <-lm(log(data$decay)~data$time)
+summary(model)
+betas<-model$coefficients
+A<-exp(betas[1]);
+b<-exp(betas[2]);
+A
+b
+```

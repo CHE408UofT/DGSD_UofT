@@ -1,0 +1,24 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+###Example 2.3
+###Install
+```{r, echo = TRUE}
+install.packages("robustreg")
+install.packages("mass")
+install.packages("synthpop")
+```
+
+###Synthetic
+```{r, echo = TRUE}
+library("synthpop")
+
+df_observed <- read.csv(file = "C:/Book/Chapter3/ExamplesEx2.3.csv")
+df_synthetic <- syn(df_observed, m = 1, method= "cart", cart.minbucket = 10);
+
+compare(df_synthetic, df_observed, vars = "Corrosion.Rate");
+write.syn(df_synthetic,'df',filetype="csv",data.labels=NULL)
+```

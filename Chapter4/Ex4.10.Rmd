@@ -1,0 +1,21 @@
+####Example 4.10
+
+####Install packages
+```{r, echo = TRUE}
+install.packages("MASS")
+```
+####Normal distribution
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter4/Examples")
+data <-read.csv(file="Ex3.7.csv",head=TRUE,sep=",")
+
+library(MASS)
+fit <- fitdistr(data$Temperature, "normal")
+class(fit)
+para<-fit$estimate
+para
+hist(data$Temperature,xlab="Temperature")
+
+shapiro.test(data$Temperature)
+```
+

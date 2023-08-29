@@ -1,0 +1,37 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 4.6
+
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("earth")
+```
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter4/Examples")
+data <-read.csv(file="Ex4.6.csv",head=TRUE,sep=",")
+data=data[c(1:29),c(1:6)];
+```
+
+###MARS
+```{r, echo = TRUE}
+library(earth)
+mars1 <-earth(data$h~ ., data = data,degree=3)
+print(mars1)
+summary(mars1)
+
+datax=data[c(1:29),c(1:5)];
+prediction <- predict(mars1,datax)
+prediction
+
+plot(prediction,data$h,xlab="predicted 'h'",ylab="real 'h'")
+best_line<-lm(prediction~data$h)
+abline(best_line,col="red")
+```

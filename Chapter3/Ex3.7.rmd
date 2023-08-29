@@ -1,0 +1,48 @@
+6---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Chapter 3, Example 3.7
+by Daniela Galatro, 2021
+
+###Install
+```{r, echo = TRUE}
+install.packages("moments")
+```
+
+
+###General
+```{r, echo = TRUE}
+library(moments)
+
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.7.csv",head=TRUE,sep=",")
+
+
+#Temperature Histogram
+summary(data$Temperature)
+hist(data$Temperature,
+xlab="Temperature, °C",
+xlim=c(10,40),
+col="blue",
+freq=TRUE) 
+
+print(skewness(data$Temperature))
+print(kurtosis(data$Temperature))
+
+
+#Wind Speed Histogram
+summary(data$Wind)
+hist(data$Wind,
+xlab="Wind speed, m/s",
+xlim=c(0,12),
+col="blue",
+freq=TRUE) 
+
+
+print(skewness(data$Wind))
+print(kurtosis(data$Wind))
+```

@@ -1,0 +1,65 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("pracma")
+```
+###Equally spaced grid
+```{r, echo = TRUE}
+library(pracma)
+
+
+start_time <- Sys.time()
+
+#Arrhenius example
+
+A<-c()
+Ea<-c()
+
+n<-20000;
+m<-20000;
+
+A<-linspace(450,500,n); #Pre-exponential factor
+Ea<-linspace(12,18,m); #Activation energy
+k<-478.5; #Rate constant
+R<-8.314; #Universal gas constant
+Temp<-599; #Temperature
+
+x1_opt <- 1e10;
+x2_opt <- 1e10;
+f<-10000;
+f_tar  <- 100000;
+iter<-0;
+
+for (i in 1:n) {
+    for (j in 1:m) {
+        kdot<-A[i]*exp(-Ea[i]/(R*Temp));
+        f_error[i]<-(k-kdot)^2;
+        if (f_error[i]<=f_tar) {
+            f_tar<-f_error[i];
+            x1_opt<-A[i];
+            x2_opt<-Ea[i];
+            } else {
+            iter<-i;
+            break;
+        }
+    }
+}
+x1_opt;
+x2_opt;
+kdot
+
+
+
+end_time <- Sys.time()
+
+end_time - start_time
+
+```
+
+

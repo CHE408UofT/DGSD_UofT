@@ -1,0 +1,121 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+###Intro
+```{r, echo = TRUE}
+#Thank you so much to my mentee for helping me with this code!
+library(stats)
+```
+
+###Fitting target
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter5/Examples")
+data<-read.csv(file="Ex5.3.csv",head=TRUE,sep=",")
+indexf<-length(data$Time);
+Tdelay<-2; #For Target
+indexd<-which(data$Time > Tdelay);
+indexd<-indexd[1];
+data=data[c(indexd:indexf),c(1:2)]
+
+#Perform nonlinear fitting:
+targetM<-nls(data$Target~a*(1-exp(-(data$Time-TDelay)/b)),data=data,start=list(a=0.5,b=0.5))
+summa<-summary(targetM)
+
+#Target trajectory parameters
+FinalTar<-summa$coefficients[1] #Final target
+timeConst<-summa$coefficients[2] #Time constant
+FinalTar
+timeConst
+```
+
+###Model Settings
+```{r, echo = TRUE}
+#Model parameters
+Gain<- 2;
+Tau<- 2; #Time constant
+Timestep<-0.2;
+
+maxtime<- 9;
+timev<-seq(0, maxtime, by=Timestep);
+```
+
+###MPC Model
+```{r, echo = TRUE}
+
+#Clean vectors
+Manipulated<-c()
+Model<-c()
+Target<-c()
+n<-c()
+result<-c()
+DeltaMW<-c()
+
+
+tlength<-length(timev);
+n<-tlength
+DeltaMW<-rep(0.1,times=n); #DeltaMW initialization
+
+Manipulated[1]<-0;
+Model[1]<-0;
+Target[1]<-0;
+
+
+#Initialize
+for (i in 1:n) {
+  Manipulated[i+1]<-DeltaMW[i+1]+Manipulated[i];
+  Model[i+1]<-(Model[i]*exp(-Timestep/Tau))+Manipulated[i+1]*Gain*(1-exp(-Timestep/Tau));
+  timev[i+1]
+  Target[i+1]<-FinalTar*(1-exp(-(timev[i+1]-TDelay)/timeConst));
+  Target<-pmax(Target,0)
+}
+Manipulated<-Manipulated[0:n]
+Model<-Model[0:n]
+Target<-Target[0:n]
+errorcal<-sum((Model-Target)^2);
+
+
+#Call function
+my_function <- function(DeltaMW) {
+for (i in 1:n) {
+  Manipulated[i+1]<-DeltaMW[i+1]+Manipulated[i];
+  Model[i+1]<-(Model[i]*exp(-Timestep/Tau))+Manipulated[i+1]*Gain*(1-exp(-Timestep/Tau));
+  timev[i+1]
+  Target[i+1]<-FinalTar*(1-exp(-(timev[i+1]-TDelay)/timeConst));
+  Target<-pmax(Target,0)
+}
+Manipulated<-Manipulated[0:n]
+Model<-Model[0:n]
+Target<-Target[0:n]
+errorcal<-sum((Model-Target)^2);
+}
+
+#Optimize and print results
+result <- optim(par=DeltaMW,my_function,method="L-BFGS-B",lower=0.0);
+DeltaMW<-result$par
+Manipulated[1]<-0;
+Model[1]<-0;
+Target[1]<-0;
+for (i in 1:n) {
+  Manipulated[i+1]<-DeltaMW[i+1]+Manipulated[i];
+  Model[i+1]<-(Model[i]*exp(-Timestep/Tau))+Manipulated[i+1]*Gain*(1-exp(-Timestep/Tau));
+  timev[i+1]
+  Target[i+1]<-FinalTar*(1-exp(-(timev[i+1]-TDelay)/timeConst));
+  Target<-pmax(Target,0)
+}
+Model<-Model[0:n]
+Target<-Target[0:n]
+```
+
+###Plot
+```{r, echo = TRUE}
+plot(timev,Target,type="l",col=2,xlab="time (s)", ylab="Target / Model")
+lines(timev,Model,col=4)
+legend(x = "bottomright",          # Position
+       legend = c("Target", "Model"),  # Legend texts
+       lty = c(1, 1),           # Line types
+       col = c(2, 4),           # Line colors
+       lwd = 2)                 # Line width
+```
