@@ -1,0 +1,18 @@
+6---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 2.6
+
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter2/Examples")
+data <-read.csv(file="Ex2.6.csv",head=TRUE,sep=",")
+data
+boxplot(PM~Year,data=data, 
+   xlab="Year", ylab="PM10",ylim = c(300, 370)) 
+```

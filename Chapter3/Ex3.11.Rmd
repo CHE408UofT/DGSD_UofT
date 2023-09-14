@@ -1,0 +1,36 @@
+####Example 3.11
+
+####Install packages
+```{r, echo = TRUE}
+install.packages("MASS")
+install.packages("fitdistrplus")
+install.packages("weibullness")
+```
+####Weibull distribution
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.11.csv",head=TRUE,sep=",")
+data<-data[c(1:10),c(1:1)];
+
+library(MASS)
+library(fitdistrplus)
+
+# Fit model and extract parameters 
+fitW <- fitdist(data, "weibull");
+w_shape <- fitW$estimate["shape"];
+w_scale <- fitW$estimate["scale"];
+
+# Summarize and plot
+summary(fitW)
+plot(fitW)
+
+#Test the Weibull distribution
+library(weibullness)
+wp.test(data)
+
+#Estimate reliability at 'X' years:
+years<-15;
+reliability <- exp(-(years / w_scale)**(w_shape))
+reliability
+```
+

@@ -1,0 +1,48 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 3.4
+
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.2.csv",head=TRUE,sep=",")
+data=data[c(1:83),c(1:4)];
+data
+```
+
+###Model
+```{r, echo = TRUE}
+b1<-data$InvT;
+b2<-data$SOC;
+b3<-data$time;
+b12<-data$InvT*data$SOC;
+b13<-data$InvT*data$time;
+b23<-data$SOC*data$time;
+b11<-data$InvT*data$InvT;
+b22<-data$SOC*data$SOC;
+b33<-data$time*data$time;
+model <-lm(data$Capacity~b1+b2+b3+b12+b13+b23+b11+b22+b33)
+summary(model)
+```
+
+###Model - simplified
+```{r, echo = TRUE}
+b1<-data$InvT;
+
+b3<-data$time;
+
+b13<-data$InvT*data$time;
+b23<-data$SOC*data$time;
+b11<-data$InvT*data$InvT;
+
+b33<-data$time*data$time;
+simplified_model <-lm(data$Capacity~b1+b3+b13+b23+b11+b33)
+summary(simplified_model )
+```
+

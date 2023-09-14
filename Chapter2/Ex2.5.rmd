@@ -1,0 +1,28 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 2.5
+
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter2/Examples")
+data <-read.csv(file="Ex2.5a.csv",head=TRUE,sep=",")
+data
+# Multivariable Scatter plot for NMC cells
+pairs(~Capacity+Temp+SOC,data=data,
+   col= ifelse(data$Temp == 35, "blue",ifelse(data$Temp == 25, "black","red")))
+```
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter2/Examples")
+data <-read.csv(file="Ex2.5b.csv",head=TRUE,sep=",")
+data
+# Multivariable Scatter plot for NCA cells
+pairs(~Capacity+Temp+SOC,data=data,
+   col= ifelse(data$Temp == 35, "blue",ifelse(data$Temp == 25, "black","red")))
+```

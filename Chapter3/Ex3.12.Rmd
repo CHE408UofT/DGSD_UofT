@@ -1,0 +1,30 @@
+####Example 3.12
+
+####Install packages
+```{r, echo = TRUE}
+install.packages("MASS")
+install.packages("fitdistrplus")
+install.packages("goft")
+```
+####Gamma distribution
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.12.csv",head=TRUE,sep=",")
+data<-data[c(1:17),c(1:2)];
+data
+
+library(MASS)
+library(fitdistrplus)
+
+# Fit model and extract parameters 
+fitG <- fitdist(data$Capacity, distr="gamma");
+
+# Summarize and plot
+summary(fitG)
+plot(fitG)
+
+#Gamma test
+library(goft)
+gamma_test(data$Capacity)
+```
+

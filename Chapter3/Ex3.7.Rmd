@@ -1,0 +1,30 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 3.7
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("stats")
+```
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.7.csv",head=TRUE,sep=",")
+data=data[c(1:14),c(1:2)];
+data
+```
+
+###Model
+```{r, echo = TRUE}
+library(stats)
+model <- nls(data$Capacity~ k*(data$N^p),
+                 data = data,
+                 start = list(k=4, p = -0.1),)
+summary(model)
+```
+

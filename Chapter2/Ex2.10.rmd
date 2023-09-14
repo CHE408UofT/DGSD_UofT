@@ -1,0 +1,53 @@
+6---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 2.10
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("corrplot")
+```
+###Correlation
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter2/Examples")
+data <-read.csv(file="Ex2.10.csv",head=TRUE,sep=",")
+data
+M <- cor(data)
+
+library(corrplot)
+#Using circles for visualizations
+corrplot(M, method="circle")
+
+#Using numbers for visualizations
+corrplot(M, method="number", type = "upper")
+```
+
+###Significance
+```{r, echo = TRUE}
+#p-values matrix
+cor.mtest <- function(mat, ...) {
+    mat <- as.matrix(mat)
+    n <- ncol(mat)
+    p.mat<- matrix(NA, n, n)
+    diag(p.mat) <- 0
+    for (i in 1:(n - 1)) {
+        for (j in (i + 1):n) {
+            tmp <- cor.test(mat[, i], mat[, j], ...)
+            p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+        }
+    }
+  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+  p.mat
+}
+# matrix of the p-value of the correlation
+p.mat <- cor.mtest(data)
+head(p.mat[, 1:6]) #"6" is the total number of variables
+
+#add significance level
+corrplot(M, type="upper", order="hclust", 
+         p.mat = p.mat, sig.level = 0.5, insig = "blank")
+```

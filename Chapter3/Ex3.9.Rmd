@@ -1,0 +1,76 @@
+####Example 3.9
+
+####Install packages
+```{r, echo = TRUE}
+install.packages("e1071")
+install.packages("ggpubr")
+```
+####Linear regression
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.9.csv",head=TRUE,sep=",")
+data=data[c(1:35),c(2:3)];
+data
+ 
+# Plot the data
+plot(data$Concentration,data$PCR_hospital, xlab="Virus concentration, copies/L",ylab="Number of reported COVID cases in hospitals", pch=16)
+
+# Create a linear regression model
+model <- lm(PCR_hospital ~ Concentration, data)
+ 
+# Add the fitted line
+abline(model)
+
+# make a prediction for each X
+predictedY <- predict(model, data)
+ 
+# display the predictions
+points(data$Concentration, predictedY, col = "red", pch=4)
+
+summary(model)
+```
+
+####SVM
+```{r, echo = TRUE}
+library(e1071)
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.9.csv",head=TRUE,sep=",")
+data=data[c(1:35),c(2:3)];
+data
+
+model<- svm(PCR_hospital ~ Concentration, data)
+ 
+predictedY<- predict(model, data)
+
+# Plot the data
+plot(data$Concentration,data$PCR_hospital, xlab="Virus concentration, copies/L",ylab="Number of reported COVID cases in hospitals", pch=16)
+points(data$Concentration, predictedY, col = "red", pch=4)
+
+
+#Add linear:
+modelL <- lm(PCR_hospital ~ Concentration, data)
+predictedYL <- predict(modelL, data)
+points(data$Concentration, predictedYL, col = "blue", pch=4)
+
+
+#Tuning SVM
+tuneResult<- tune(svm, PCR_hospital ~ Concentration,  data = data,
+ranges = list(epsilon = seq(0.08,0.15,0.01), cost = 2^(2:9))
+)
+print(tuneResult)
+# Draw the tuning graph
+plot(tuneResult)
+
+
+tunedModel<- tuneResult$best.model
+tunedModelY<- predict(tunedModel, data)
+ 
+library("ggpubr")
+cor(tunedModelY, data$PCR_hospital, method = c("pearson", "kendall", "spearman"))
+rsq<-cor.test(tunedModelY, data$PCR_hospital, method=c("pearson", "kendall", "spearman"))
+print(rsq)
+
+plot(data$Concentration,data$PCR_hospital, xlab="Virus concentration, copies/L",ylab="Number of reported COVID cases in hospitals", pch=16)
+points(data$Concentration, tunedModelY, col = "red", pch=4)
+```
+

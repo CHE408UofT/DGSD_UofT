@@ -1,0 +1,47 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 3.8
+###Install Packages
+```{r, echo = TRUE}
+install.packages("neuralnet")
+install.packages("grid")
+install.packages("MASS")
+install.packages("brnn")
+install.packages("nnet")
+```
+
+###General - Neural Network
+```{r, echo = TRUE}
+library(neuralnet)
+library(grid)
+library(MASS)
+library(brnn)
+library(nnet)
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.8.csv",head=TRUE,sep=",")
+data=data[c(1:72),c(1:4)];
+data
+nn <- neuralnet(DC~ Salt+Temperature+Concentration,data=data, hidden=8, err.fct="sse",act.fct = "tanh",stepmax=1000,linear.output=FALSE);
+plot(nn)
+```
+
+###Install packages  (random forest)
+```{r, echo = TRUE}
+install.packages("randomForest")
+install.packages("caret")
+```
+
+###General (random forest)
+```{r, echo = TRUE}
+library(randomForest)
+library(caret)
+rf <- randomForest(DC~ Salt+ Temperature+Concentration,data=data)
+print(rf)
+```
+
+

@@ -1,0 +1,46 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+###Example 5.5
+###Install packages
+```{r, echo = TRUE}
+install.packages("rBayesianOptimization")
+```
+
+###Bayesian optimization
+```{r, echo = TRUE}
+library(rBayesianOptimization)
+
+Q<-0.557; #ft³/s - flow rate
+ro<-62.4; #lb/ft³ - density
+miu<-1; #cP - viscosity
+ab<-0.2; #fractional annual depreciation(a) and maintenance(b) on pipeline
+ab_dash<-0.4; #fractional annual depreciation on pumping installation (a) and installed cost of pipeline including fittings (b)
+E<-0.5; #combined fractional efficiency of pump and motor
+FF<-6.7; #factor for installation and fitting
+K<-0.04;  #USA/kWh - energy cost delivered to the motor
+Le<-2.74 #1/ft - factor for friction in fitting, equivalent length in pipe diameter per length of pipe
+n<-1.35 #Exponent in pipe-cost equation
+X<-29.52 #USD - Cost of 1ft of 1ft diameter pipe
+Y<-365 #d Days of operation
+Z<-0.1 #Fractional rate of return of incremental investment
+fi<-0.55 #Factor for taxes and other expenses
+M<-0.115; #Factor for cost of piping installation in terms of yearly cost of power delivered to the fluid
+
+D<-0.1;
+fd <- function(D) {
+  numerator<-((D^(4.84+n))*n*X*E*(1+FF)*(Z+ab*(1-fi)));
+  denominator<-(1+0.794*Le*D*(0.000189*Y*K*(ro^0.84)*(miu^0.16)))*((1+M)*(1-fi)+(Z*M/ab_dash));
+  f<--(Q-(numerator/denominator)^(1/2.84))^2;
+  list(Score=f,Pred=0);
+}
+
+search_bound <- list(D = c(0.1,0.8));
+opt_res<-BayesianOptimization(FUN=fd,bounds=search_bound,n_iter=20,init_points = 3)
+```
+
+

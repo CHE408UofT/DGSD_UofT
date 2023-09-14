@@ -1,0 +1,47 @@
+6---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 2.11
+
+###Install packages
+```{r, echo = TRUE}
+#another way of getting packages
+packages<-function(x){
+  x<-as.character(match.call()[[2]])
+  if (!require(x,character.only=TRUE)){
+    install.packages(pkgs=x,repos="http://cran.r-project.org")
+    require(x,character.only=TRUE)
+  }
+}
+
+packages(fviz_cluster)
+packages(gridExtra)
+packages(cluster) 
+packages(factoextra) # visualization tool
+```
+###Clusters
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter2/Examples")
+data <-read.csv(file="Ex2.11.csv",head=TRUE,sep=",")
+
+dataNorm <- as.data.frame(scale(data)) #normalizing
+
+#k-means clustering
+set.seed(100)
+data_K2 <- kmeans(dataNorm, centers = 2, nstart = 25)
+fviz_cluster(data_K2, data = dataNorm)
+```
+###Optimal number of Clusters
+```{r, echo = TRUE}
+#Optimal clusters (k) Using Elbow method
+fviz_nbclust(x = dataNorm,FUNcluster = kmeans, method = 'wss' )
+
+#Optimal clusters (k) Using Average Silhouette Method
+fviz_nbclust(x = dataNorm,FUNcluster = kmeans, method = 'silhouette' )
+```
+
+

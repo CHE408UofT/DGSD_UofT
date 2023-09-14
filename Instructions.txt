@@ -1,0 +1,7 @@
+Set your directory (in each code, where applicable) to:
+
+C:/Book/Chapter3/Examples
+
+And save your codes & datasets (*.csv files) accordingly.
+
+The previous directory is for Chapter 3!

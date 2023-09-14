@@ -1,0 +1,30 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 3.5
+
+
+###General
+```{r, echo = TRUE}
+setwd("C:/Book/Chapter3/Examples")
+data <-read.csv(file="Ex3.5.csv",head=TRUE,sep=",")
+data=data[c(1:13),c(1:2)];
+data
+plot(data$Volume...,data$Temp...R,xlab = "Cumulative volume, %", ylab= "Temperature, R")
+```
+
+###Install package
+```{r, echo = TRUE}
+install.packages("npreg")
+```
+###Model
+```{r, echo = TRUE}
+library(npreg)
+model<-smooth.spline(x=data$Volume...,y=data$Temp...R)
+plot(data$Volume...,data$Temp...R,xlab = "Cumulative volume, %", ylab= "Temperature, R")
+lines(model,col="blue")
+```

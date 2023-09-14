@@ -1,0 +1,38 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+##Example 2.2
+
+###Install packages
+```{r, echo = TRUE}
+install.packages("ggplot2")
+```
+
+###General
+```{r, echo = TRUE}
+library(ggplot2)
+setwd("C:/Book/Chapter2/Examples")
+data <-read.csv(file="Ex2.2.csv",head=TRUE,sep=",")
+
+# Basic time-series plot
+p<- ggplot(data = data, aes(x = data$Time..years, y = data$relative.degradation...))+
+  geom_line(color = "#00AFBB", size = 2)+xlab("Time, years")+ ylab("Degradation, %")
+p
+
+#Add trend smoothed line:
+loessp<- p + stat_smooth(
+  color = "#FC4E07", fill = "#FC4E07",
+  method = "loess"
+  )
+loessp
+
+#Get the model and predict a value (for instance @120 years)
+model <- loess(data$relative.degradation... ~ data$Time..years,data)
+predicted.value<- predict(model,120)
+predicted.value
+```
+
